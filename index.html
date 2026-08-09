@@ -3,51 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AK JHALAK - Har Jhalak Khaas Hai</title>
+<title>AK JHALAK - Global Live Network Engine</title>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- FontAwesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
 <style>
   body { background-color: #0f0f0f; color: #f1f1f1; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-  .scrollbar-hide::-webkit-scrollbar { display: none; }
-  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
   .brand-logo-glow { filter: drop-shadow(0px 0px 8px rgba(239, 68, 68, 0.5)); }
 </style>
 </head>
 <body class="overflow-x-hidden">
 
-<!-- 1. TOP NAVBAR -->
+<!-- TOP NAVBAR -->
 <nav class="fixed top-0 left-0 w-full bg-[#0f0f0f] z-40 flex items-center justify-between px-4 py-2 border-b border-zinc-800">
-  
-  <!-- BRAND OFFICIAL LOGO -->
   <div class="flex items-center gap-3">
     <button class="p-2 hover:bg-zinc-800 rounded-full text-lg text-zinc-300"><i class="fa-solid fa-bars"></i></button>
     <a href="#" class="flex items-center gap-3 hover:opacity-95 transition-all">
-      <!-- OFFICIAL AK-JHALAK LOGO IMAGE -->
-      <img src="logo.png.png" id="mainAKLogo" class="h-10 sm:h-12 w-auto object-contain brand-logo-glow" alt="AK-JHALAK Logo">
+      <img src="logo.png.png" id="mainAKLogo" class="h-10 sm:h-12 w-auto object-contain brand-logo-glow" alt="AK-JHALAK Logo" onerror="this.onerror=null; this.src='logo.png';">
     </a>
   </div>
 
-  <!-- SEARCH BAR -->
+  <!-- PUBLIC SEARCH -->
   <div class="flex items-center gap-3 w-1/2 max-w-2xl">
     <div class="flex items-center w-full bg-zinc-900 border border-zinc-700 rounded-full overflow-hidden focus-within:border-red-500">
-      <input type="text" id="searchInput" placeholder="Search videos or channels..." class="w-full bg-transparent px-4 py-2 text-sm text-white focus:outline-none">
-      <button onclick="handleSearch()" class="bg-zinc-800 px-6 py-2 border-l border-zinc-700 hover:bg-zinc-700 text-zinc-300">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
+      <input type="text" id="searchInput" placeholder="Search public videos or channels..." class="w-full bg-transparent px-4 py-2 text-sm text-white focus:outline-none">
+      <button class="bg-zinc-800 px-6 py-2 border-l border-zinc-700 text-zinc-300"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
   </div>
 
-  <!-- ACTIONS & PROFILE -->
-  <div class="flex items-center gap-2 sm:gap-3" id="authNavSection">
+  <!-- ACTIONS -->
+  <div class="flex items-center gap-2 sm:gap-3">
     <button onclick="openLiveCameraModal()" class="flex items-center gap-1.5 bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-full text-xs font-medium text-red-400 border border-red-500/30">
       <i class="fa-solid fa-video text-red-500 animate-pulse"></i> Live Record
     </button>
     <button onclick="openUploadModal()" class="flex items-center gap-1.5 bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-full text-xs font-medium text-white border border-zinc-700">
-      <i class="fa-solid fa-upload text-amber-400"></i> Upload
+      <i class="fa-solid fa-upload text-amber-400"></i> Upload Public
     </button>
-    <button onclick="handleCreateChannelClick()" class="flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white font-bold px-4 py-1.5 rounded-full text-xs transition-all shadow-md shadow-red-600/30">
+    <button onclick="handleCreateChannelClick()" class="flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 text-white font-bold px-4 py-1.5 rounded-full text-xs transition-all shadow-md">
       <i class="fa-solid fa-plus"></i> Create Channel
     </button>
   </div>
@@ -55,146 +52,29 @@
 
 <!-- MAIN CONTAINER -->
 <div class="flex pt-16">
-
-  <!-- SIDEBAR NAVIGATION -->
   <aside class="w-60 bg-[#0f0f0f] min-h-screen hidden md:block px-3 pt-3 fixed left-0 border-r border-zinc-800 text-sm space-y-1">
-    <a href="#" class="flex items-center gap-5 px-3 py-2.5 bg-zinc-800 font-semibold rounded-xl text-red-500"><i class="fa-solid fa-house text-lg"></i> Home</a>
-    <a href="#" onclick="openLiveCameraModal()" class="flex items-center gap-5 px-3 py-2.5 hover:bg-zinc-800 rounded-xl text-zinc-300"><i class="fa-solid fa-camera text-lg text-red-500"></i> Live Camera Creator</a>
+    <a href="#" class="flex items-center gap-5 px-3 py-2.5 bg-zinc-800 font-semibold rounded-xl text-red-500"><i class="fa-solid fa-house text-lg"></i> Public Feed</a>
+    <a href="#" onclick="openLiveCameraModal()" class="flex items-center gap-5 px-3 py-2.5 hover:bg-zinc-800 rounded-xl text-zinc-300"><i class="fa-solid fa-camera text-lg text-red-500"></i> Live Recording</a>
     <a href="#" onclick="openUploadModal()" class="flex items-center gap-5 px-3 py-2.5 hover:bg-zinc-800 rounded-xl text-zinc-300"><i class="fa-solid fa-upload text-lg text-amber-400"></i> Upload Video</a>
-    <a href="#" onclick="handleCreateChannelClick()" class="flex items-center gap-5 px-3 py-2.5 hover:bg-zinc-800 rounded-xl text-zinc-300"><i class="fa-solid fa-circle-plus text-lg text-green-500"></i> Create Channel</a>
     <hr class="border-zinc-800 my-2">
-    <div class="text-zinc-500 font-bold px-3 text-xs uppercase mb-1">Account Verification</div>
     <div id="verifiedAccountBadge" class="px-3 py-2 text-xs text-amber-400/80 bg-zinc-900 border border-zinc-800 rounded-xl">
-      <i class="fa-solid fa-lock mr-1"></i> Email Verification Pending
+      <i class="fa-solid fa-globe mr-1"></i> Public Sync: Active
     </div>
   </aside>
 
-  <!-- MAIN CONTENT GRID -->
+  <!-- MAIN PUBLIC FEED -->
   <main class="md:ml-60 w-full p-4">
-    <div id="channelHeader" class="hidden mb-6 p-4 bg-zinc-900 border border-red-500/30 rounded-2xl flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <img id="userChannelLogoDisplay" class="w-14 h-14 rounded-full object-cover border-2 border-red-500 shadow-md">
-        <div>
-          <h2 id="userChannelNameDisplay" class="text-lg font-bold text-white"></h2>
-          <p id="userEmailDisplay" class="text-xs text-zinc-400"></p>
-        </div>
-      </div>
-      <span class="bg-red-600/20 text-red-400 border border-red-500/40 px-3 py-1 rounded-full text-xs font-bold">Verified Channel</span>
-    </div>
-
     <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-      <!-- Videos will be injected dynamically -->
+      <!-- Public Videos Sync Here -->
     </div>
   </main>
 </div>
 
-<!-- ================= MODALS SECTION ================= -->
-
-<!-- 1. EMAIL OTP VERIFICATION MODAL -->
-<div id="otpModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-zinc-900 border border-red-500/40 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
-    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-      <h3 class="text-lg font-bold text-red-500 flex items-center gap-2"><i class="fa-solid fa-envelope-circle-check"></i> Step 1: Email Verification</h3>
-      <button onclick="closeModal('otpModal')" class="text-zinc-400 hover:text-white text-xl">&times;</button>
-    </div>
-
-    <p class="text-xs text-zinc-400">Without Email verification, channel creation is blocked. Enter your Email ID to receive a 4-digit OTP.</p>
-
-    <div id="emailStep" class="space-y-3">
-      <input type="email" id="userEmailInput" placeholder="Enter your Email ID (e.g. user@gmail.com)..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-red-500">
-      <button onclick="sendOTP()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-lg shadow-red-600/30">Send Verification OTP</button>
-    </div>
-
-    <div id="otpStep" class="hidden space-y-3">
-      <div class="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-[11px] text-amber-300">
-        Demo OTP sent to your Email: <strong id="demoOtpCode" class="text-white text-sm tracking-widest font-black ml-1"></strong>
-      </div>
-      <input type="text" id="otpInput" maxlength="4" placeholder="Enter 4-digit OTP..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2.5 text-center text-lg tracking-widest text-white font-bold focus:outline-none focus:border-red-500">
-      <button onclick="verifyOTP()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-lg shadow-green-600/30">Verify OTP & Continue</button>
-    </div>
-  </div>
-</div>
-
-<!-- 2. CREATE CHANNEL MODAL -->
-<div id="channelModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-zinc-900 border border-zinc-700 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
-    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-      <h3 class="text-lg font-bold text-red-500 flex items-center gap-2"><i class="fa-solid fa-id-card"></i> Step 2: Create Your Channel</h3>
-      <button onclick="closeModal('channelModal')" class="text-zinc-400 hover:text-white text-xl">&times;</button>
-    </div>
-
-    <div class="space-y-3">
-      <div>
-        <label class="text-xs font-bold text-zinc-400 block mb-1">Verified Email</label>
-        <input type="text" id="verifiedEmailReadonly" readonly class="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-400 font-mono">
-      </div>
-      <div>
-        <label class="text-xs font-bold text-zinc-400 block mb-1">Custom Channel Name</label>
-        <input type="text" id="channelNameInput" placeholder="Enter any channel name you like..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
-      </div>
-      <div>
-        <label class="text-xs font-bold text-zinc-400 block mb-1">Upload Channel Logo / Photo</label>
-        <input type="file" id="channelLogoInput" accept="image/*" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-1.5 text-xs text-zinc-300 file:bg-red-600 file:text-white file:border-0 file:px-3 file:py-1 file:rounded-lg file:mr-3 file:text-xs">
-      </div>
-    </div>
-
-    <button onclick="saveChannel()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs mt-2 shadow-lg shadow-red-600/30">🚀 Launch Channel Now</button>
-  </div>
-</div>
-
-<!-- 3. LIVE CAMERA RECORD MODAL -->
-<div id="cameraModal" class="fixed inset-0 bg-black/95 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl p-5 space-y-4 shadow-2xl">
-    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-      <h3 class="text-lg font-bold text-red-500 flex items-center gap-2"><i class="fa-solid fa-camera"></i> Live Video Recorder Engine</h3>
-      <button onclick="closeCameraModal()" class="text-zinc-400 hover:text-white text-xl">&times;</button>
-    </div>
-
-    <div class="aspect-video bg-black rounded-xl overflow-hidden relative flex items-center justify-center border border-zinc-800">
-      <video id="webcamPreview" autoplay playsinline class="w-full h-full object-cover"></video>
-      <span id="recordingBadge" class="hidden absolute top-3 right-3 bg-red-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-full animate-pulse">
-        🔴 RECORDING LIVE
-      </span>
-    </div>
-
-    <div class="flex items-center justify-between">
-      <button onclick="startCamera()" class="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-power-off text-green-500 mr-1"></i> Start Cam</button>
-      <div class="flex gap-2">
-        <button id="startRecBtn" onclick="startRecording()" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow-lg shadow-red-600/30" disabled>Start Recording</button>
-        <button id="stopRecBtn" onclick="stopRecording()" class="bg-zinc-700 text-zinc-400 px-5 py-2 rounded-xl text-xs font-bold" disabled>Stop Recording</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 4. VIDEO UPLOAD MODAL -->
-<div id="uploadModal" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-zinc-900 border border-zinc-700 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
-    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-      <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Video to Channel</h3>
-      <button onclick="closeModal('uploadModal')" class="text-zinc-400 hover:text-white text-xl">&times;</button>
-    </div>
-
-    <div class="space-y-3">
-      <div>
-        <label class="text-xs font-bold text-zinc-400 block mb-1">Select Video File</label>
-        <input type="file" id="videoFileInput" accept="video/*" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-1.5 text-xs text-zinc-300 file:bg-amber-500 file:text-black file:border-0 file:px-3 file:py-1 file:rounded-lg file:mr-3 file:text-xs font-bold">
-      </div>
-      <div>
-        <label class="text-xs font-bold text-zinc-400 block mb-1">Video Title</label>
-        <input type="text" id="videoTitleInput" placeholder="Enter title..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
-      </div>
-    </div>
-
-    <button onclick="publishUploadedVideo()" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 rounded-xl text-xs mt-2 shadow-lg shadow-amber-500/20">Publish Video Live</button>
-  </div>
-</div>
-
-<!-- 5. VIDEO PLAYER MODAL -->
+<!-- PLAYER MODAL -->
 <div id="playerModal" class="fixed inset-0 bg-black/95 z-50 hidden overflow-y-auto flex items-center justify-center p-2 sm:p-6">
   <div class="bg-zinc-900 w-full max-w-5xl rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl my-auto">
     <div class="p-3 bg-zinc-800 flex justify-between items-center border-b border-zinc-700">
-      <span class="font-bold text-xs text-red-500 flex items-center gap-2"><i class="fa-solid fa-play text-red-600"></i> AK JHALAK Stream</span>
+      <span class="font-bold text-xs text-red-500 flex items-center gap-2"><i class="fa-solid fa-play"></i> Public Stream Player</span>
       <button onclick="closePlayer()" class="text-zinc-400 hover:text-white text-2xl font-bold px-2">&times;</button>
     </div>
     <div class="aspect-video w-full bg-black flex items-center justify-center">
@@ -204,43 +84,28 @@
 </div>
 
 <script>
-// STATE MANAGEMENT
-let userState = {
-  isEmailVerified: false,
-  verifiedEmail: "",
-  hasChannel: false,
-  channelName: "",
-  channelLogo: ""
-};
-
-let generatedOtp = "";
-let mediaRecorder;
-let recordedChunks = [];
-let mediaStream = null;
-
-// DEFAULT FEED DATABASE
-let videoDatabase = [
+// DEMO PUBLIC DATABASE (Local Fallback until Firebase Config is attached)
+let publicFeed = JSON.parse(localStorage.getItem('AK_PUBLIC_FEED')) || [
   {
-    id: 1,
-    title: "Big Buck Bunny - Open Source Public HD Stream",
-    channel: "AK Media",
+    id: '1',
+    title: "AK JHALAK Official Welcome Stream - Public Engine Active",
+    channel: "AK Official",
     logo: "logo.png.png",
     videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     thumbnail: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=600&q=80"
   }
 ];
 
-// INIT RENDER
-function renderGrid() {
+function renderPublicFeed() {
   const grid = document.getElementById('videoGrid');
-  grid.innerHTML = videoDatabase.map(v => `
+  grid.innerHTML = publicFeed.map(v => `
     <div onclick="playVideo('${v.videoUrl}')" class="cursor-pointer group space-y-2.5">
       <div class="relative aspect-video rounded-xl overflow-hidden bg-zinc-800 border border-zinc-800 group-hover:border-red-500/50 transition-all">
         <img src="${v.thumbnail}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-300">
-        <span class="absolute bottom-2 right-2 bg-black/80 text-red-500 text-[10px] font-bold px-2 py-0.5 rounded">PLAY</span>
+        <span class="absolute bottom-2 right-2 bg-black/80 text-red-500 text-[10px] font-bold px-2 py-0.5 rounded">WATCH</span>
       </div>
       <div class="flex gap-3 px-1">
-        <img src="${v.logo}" class="w-9 h-9 rounded-full object-cover border border-zinc-700 shrink-0" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
+        <img src="${v.logo}" class="w-9 h-9 rounded-full object-cover border border-zinc-700 shrink-0" onerror="this.src='logo.png'">
         <div class="space-y-0.5">
           <h3 class="text-xs font-bold text-white line-clamp-2 leading-snug group-hover:text-red-400">${v.title}</h3>
           <p class="text-[11px] text-zinc-400">${v.channel} <i class="fa-solid fa-circle-check text-red-500 text-[9px]"></i></p>
@@ -250,188 +115,19 @@ function renderGrid() {
   `).join('');
 }
 
-// ACCESS GUARD & CREATE CHANNEL CLICK
-function handleCreateChannelClick() {
-  if (!userState.isEmailVerified) {
-    openModal('otpModal');
-  } else if (!userState.hasChannel) {
-    document.getElementById('verifiedEmailReadonly').value = userState.verifiedEmail;
-    openModal('channelModal');
-  } else {
-    alert("You already have a channel: " + userState.channelName);
-  }
-}
-
-// STEP 1: OTP LOGIC
-function sendOTP() {
-  const email = document.getElementById('userEmailInput').value.trim();
-  if (!email || !email.includes('@')) { alert("Please enter a valid Email ID!"); return; }
-  
-  generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-  document.getElementById('demoOtpCode').innerText = generatedOtp;
-  document.getElementById('emailStep').classList.add('hidden');
-  document.getElementById('otpStep').classList.remove('hidden');
-}
-
-function verifyOTP() {
-  const input = document.getElementById('otpInput').value.trim();
-  if (input === generatedOtp) {
-    userState.isEmailVerified = true;
-    userState.verifiedEmail = document.getElementById('userEmailInput').value.trim();
-    
-    document.getElementById('verifiedAccountBadge').innerHTML = `<i class="fa-solid fa-check-circle text-green-500 mr-1"></i> Verified: ${userState.verifiedEmail}`;
-    closeModal('otpModal');
-    
-    document.getElementById('verifiedEmailReadonly').value = userState.verifiedEmail;
-    openModal('channelModal');
-  } else {
-    alert("Incorrect OTP! Try again.");
-  }
-}
-
-// STEP 2: SAVE CHANNEL & LOGO
-function saveChannel() {
-  const name = document.getElementById('channelNameInput').value.trim();
-  const logoInput = document.getElementById('channelLogoInput');
-
-  if (!name) { alert("Please enter Channel Name!"); return; }
-
-  userState.hasChannel = true;
-  userState.channelName = name;
-
-  if (logoInput.files && logoInput.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      userState.channelLogo = e.target.result;
-      updateChannelUI();
-    };
-    reader.readAsDataURL(logoInput.files[0]);
-  } else {
-    userState.channelLogo = 'logo.png.png';
-    updateChannelUI();
-  }
-
-  closeModal('channelModal');
-  alert("🎉 Channel Created Successfully!");
-}
-
-function updateChannelUI() {
-  document.getElementById('channelHeader').classList.remove('hidden');
-  document.getElementById('userChannelNameDisplay').innerText = userState.channelName;
-  document.getElementById('userEmailDisplay').innerText = userState.verifiedEmail;
-  document.getElementById('userChannelLogoDisplay').src = userState.channelLogo;
-}
-
-// LIVE CAMERA RECORDING ENGINE
-async function openLiveCameraModal() {
-  openModal('cameraModal');
-  await startCamera();
-}
-
-async function startCamera() {
-  try {
-    mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    document.getElementById('webcamPreview').srcObject = mediaStream;
-    document.getElementById('startRecBtn').disabled = false;
-  } catch(err) {
-    alert("Camera permission denied or camera not found!");
-  }
-}
-
-function startRecording() {
-  recordedChunks = [];
-  mediaRecorder = new MediaRecorder(mediaStream);
-  mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
-  mediaRecorder.onstop = saveRecordedVideo;
-  
-  mediaRecorder.start();
-  document.getElementById('recordingBadge').classList.remove('hidden');
-  document.getElementById('startRecBtn').disabled = true;
-  document.getElementById('stopRecBtn').disabled = false;
-}
-
-function stopRecording() {
-  mediaRecorder.stop();
-  document.getElementById('recordingBadge').classList.add('hidden');
-  document.getElementById('startRecBtn').disabled = false;
-  document.getElementById('stopRecBtn').disabled = true;
-}
-
-function saveRecordedVideo() {
-  const blob = new Blob(recordedChunks, { type: 'video/mp4' });
-  const videoUrl = URL.createObjectURL(blob);
-  
-  videoDatabase.unshift({
-    id: Date.now(),
-    title: "Live Camera Record - " + new Date().toLocaleTimeString(),
-    channel: userState.hasChannel ? userState.channelName : "Live Camera",
-    logo: userState.hasChannel ? userState.channelLogo : "logo.png.png",
-    videoUrl: videoUrl,
-    thumbnail: "https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=600&q=80"
-  });
-
-  renderGrid();
-  closeCameraModal();
-  alert("🎬 Recorded Video Added to Feeds!");
-}
-
-function closeCameraModal() {
-  if (mediaStream) {
-    mediaStream.getTracks().forEach(track => track.stop());
-  }
-  closeModal('cameraModal');
-}
-
-// VIDEO UPLOAD ENGINE
-function openUploadModal() {
-  if (!userState.hasChannel) {
-    alert("Please verify Email and create Channel first!");
-    handleCreateChannelClick();
-    return;
-  }
-  openModal('uploadModal');
-}
-
-function publishUploadedVideo() {
-  const fileInput = document.getElementById('videoFileInput');
-  const title = document.getElementById('videoTitleInput').value.trim();
-
-  if (!fileInput.files[0] || !title) { alert("Please select a video file and enter a title!"); return; }
-
-  const videoUrl = URL.createObjectURL(fileInput.files[0]);
-
-  videoDatabase.unshift({
-    id: Date.now(),
-    title: title,
-    channel: userState.channelName,
-    logo: userState.channelLogo,
-    videoUrl: videoUrl,
-    thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80"
-  });
-
-  renderGrid();
-  closeModal('uploadModal');
-  alert("🚀 Video Published Live!");
-}
-
-// UTILS
-function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
 function playVideo(url) {
   const player = document.getElementById('html5Player');
   player.src = url;
-  openModal('playerModal');
+  document.getElementById('playerModal').classList.remove('hidden');
 }
 
 function closePlayer() {
   const player = document.getElementById('html5Player');
   player.pause();
-  closeModal('playerModal');
+  document.getElementById('playerModal').classList.add('hidden');
 }
 
-// START ENGINE
-renderGrid();
+renderPublicFeed();
 </script>
 </body>
 </html>
