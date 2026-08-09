@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AK JHALAK - Ultimate Smart Video Engine</title>
+<title>AK JHALAK - Har Jhalak Khaas Hai</title>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- FontAwesome Icons -->
@@ -12,7 +12,7 @@
   body { background-color: #0f0f0f; color: #f1f1f1; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-  .logo-glow { filter: drop-shadow(0px 0px 8px rgba(239, 68, 68, 0.7)); }
+  .brand-logo-glow { filter: drop-shadow(0px 0px 8px rgba(239, 68, 68, 0.5)); }
 </style>
 </head>
 <body class="overflow-x-hidden">
@@ -20,14 +20,12 @@
 <!-- 1. TOP NAVBAR -->
 <nav class="fixed top-0 left-0 w-full bg-[#0f0f0f] z-40 flex items-center justify-between px-4 py-2 border-b border-zinc-800">
   
-  <!-- BRAND LOGO -->
+  <!-- BRAND OFFICIAL LOGO -->
   <div class="flex items-center gap-3">
     <button class="p-2 hover:bg-zinc-800 rounded-full text-lg text-zinc-300"><i class="fa-solid fa-bars"></i></button>
-    <a href="#" class="flex items-center gap-3 font-black text-2xl tracking-wider text-red-500 hover:opacity-90">
-      <div class="w-10 h-10 rounded-full bg-zinc-900 border border-red-500/50 flex items-center justify-center p-0.5 shadow-lg shadow-red-600/30">
-        <img src="logo.png" id="customBrandLogo" class="w-full h-full object-contain logo-glow" alt="S Logo" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full rounded-full bg-gradient-to-tr from-red-600 via-zinc-900 to-black flex items-center justify-center font-black text-white text-xl shadow-inner border border-red-500\'>S</div>';">
-      </div>
-      <span class="bg-gradient-to-r from-red-500 via-zinc-200 to-red-600 bg-clip-text text-transparent font-extrabold tracking-wide">AK JHALAK</span>
+    <a href="#" class="flex items-center gap-3 hover:opacity-95 transition-all">
+      <!-- OFFICIAL AK-JHALAK LOGO IMAGE -->
+      <img src="logo.png.png" id="mainAKLogo" class="h-10 sm:h-12 w-auto object-contain brand-logo-glow" alt="AK-JHALAK Logo">
     </a>
   </div>
 
@@ -49,7 +47,7 @@
     <button onclick="openUploadModal()" class="flex items-center gap-1.5 bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-full text-xs font-medium text-white border border-zinc-700">
       <i class="fa-solid fa-upload text-amber-400"></i> Upload
     </button>
-    <button onclick="handleCreateChannelClick()" class="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-1.5 rounded-full text-xs transition-all shadow-md shadow-red-600/30">
+    <button onclick="handleCreateChannelClick()" class="flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white font-bold px-4 py-1.5 rounded-full text-xs transition-all shadow-md shadow-red-600/30">
       <i class="fa-solid fa-plus"></i> Create Channel
     </button>
   </div>
@@ -226,7 +224,7 @@ let videoDatabase = [
     id: 1,
     title: "Big Buck Bunny - Open Source Public HD Stream",
     channel: "AK Media",
-    logo: "logo.png",
+    logo: "logo.png.png",
     videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     thumbnail: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=600&q=80"
   }
@@ -284,7 +282,6 @@ function verifyOTP() {
     document.getElementById('verifiedAccountBadge').innerHTML = `<i class="fa-solid fa-check-circle text-green-500 mr-1"></i> Verified: ${userState.verifiedEmail}`;
     closeModal('otpModal');
     
-    // Auto-advance to Step 2
     document.getElementById('verifiedEmailReadonly').value = userState.verifiedEmail;
     openModal('channelModal');
   } else {
@@ -310,7 +307,7 @@ function saveChannel() {
     };
     reader.readAsDataURL(logoInput.files[0]);
   } else {
-    userState.channelLogo = 'logo.png';
+    userState.channelLogo = 'logo.png.png';
     updateChannelUI();
   }
 
@@ -368,7 +365,7 @@ function saveRecordedVideo() {
     id: Date.now(),
     title: "Live Camera Record - " + new Date().toLocaleTimeString(),
     channel: userState.hasChannel ? userState.channelName : "Live Camera",
-    logo: userState.hasChannel ? userState.channelLogo : "logo.png",
+    logo: userState.hasChannel ? userState.channelLogo : "logo.png.png",
     videoUrl: videoUrl,
     thumbnail: "https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=600&q=80"
   });
